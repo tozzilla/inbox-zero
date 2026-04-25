@@ -32,7 +32,12 @@ export const POST = withAuth("imap/test-connection", async (request) => {
     await client.logout();
     results.imap = true;
   } catch (error) {
-    results.error = `IMAP: ${error instanceof Error ? error.message : "Connection failed"}`;
+    const msg = error instanceof Error ? error.message : "Connection failed";
+    const detail =
+      (error as Record<string, unknown>)?.responseText ||
+      (error as Record<string, unknown>)?.serverResponseCode ||
+      "";
+    results.error = `IMAP: ${msg}${detail ? ` (${detail})` : ""}`;
     return NextResponse.json(results, { status: 400 });
   }
 
