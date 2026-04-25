@@ -36,6 +36,7 @@ export async function listFoldersAsOutlookFolders(
     childFolderCount: 0,
     unreadItemCount: 0,
     totalItemCount: 0,
+    childFolders: [],
   }));
 }
 

@@ -32,7 +32,8 @@ export async function fetchMessageByUid(
 ): Promise<ParsedMessage | null> {
   try {
     // Find the sequence number for this UID
-    const seqNums = await client.search({ uid: `${uid}` }, { uid: false });
+    const seqNums =
+      (await client.search({ uid: `${uid}` }, { uid: false })) || [];
     if (seqNums.length === 0) return null;
 
     const seq = seqNums[0];
@@ -98,7 +99,8 @@ export async function fetchMessagesByUids(
   for (const uid of uids) {
     try {
       // SEARCH UID <uid> returns matching sequence numbers
-      const seqNums = await client.search({ uid: `${uid}` }, { uid: false });
+      const seqNums =
+        (await client.search({ uid: `${uid}` }, { uid: false })) || [];
       if (seqNums.length === 0) continue;
 
       const seq = seqNums[0];
@@ -160,7 +162,7 @@ export async function searchImapMessages(
   criteria: Record<string, unknown>,
   maxResults?: number,
 ): Promise<number[]> {
-  const uids = await client.search(criteria, { uid: true });
+  const uids = (await client.search(criteria, { uid: true })) || [];
 
   // UIDs are returned in ascending order; reverse for newest-first
   uids.reverse();
